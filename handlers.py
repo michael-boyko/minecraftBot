@@ -90,6 +90,7 @@ async def auth_code(update: Update, context: CallbackContext) -> int:
     else:
         await update.message.reply_text('Неверный код авторизации.'
                                         'Попробуйте снова.')
+        send_command_msg(nickname, true_code)
         return AUTH_CODE
 
 def generate_auth_code() -> str:
