@@ -118,14 +118,14 @@ async def message_handler(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
     msg = update.message.text
     telegram_id = user.id
-
+    print('MDB -2')
     # Проверка, авторизован ли пользователь
     user_data = get_user_by_telegram_id(telegram_id)
-
+    send_command_say(user_data[c.BD_NICKNAME], msg)
     if user_data:
         # Пользователь авторизован, обрабатываем его сообщение
         print('MDB -1')
-        send_command_say(user_data[c.BD_NICKNAME], msg)
+        
         await handle_user_messages(update, context, user_data, msg)
     else:
         await update.message.reply_text('Пожалуйста, сначала выполните'
