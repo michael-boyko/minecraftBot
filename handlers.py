@@ -1,4 +1,5 @@
 import json
+import os
 import random
 import constants as c
 from telegram import Update
@@ -36,7 +37,13 @@ async def start(update: Update, context: CallbackContext) -> int:
         return NICKNAME
 
 def validate_auth_nickname(nickname):
-    with open('/home/mboiko/ServerMinecraft/whitelist.json', 'r') as file:
+    whitelist_path = '/home/mboiko/ServerMinecraft/whitelist.json'
+
+    if not os.path.exists(whitelist_path):
+        print(f"File not found: {whitelist_path}")
+        return False
+
+    with open(whitelist_path, 'r') as file:
         whitelist = json.load(file)
 
     for entry in whitelist:
