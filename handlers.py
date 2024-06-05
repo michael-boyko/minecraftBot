@@ -36,7 +36,7 @@ async def start(update: Update, context: CallbackContext) -> int:
         return NICKNAME
 
 def validate_auth_nickname(nickname):
-    with open('whitelist.json', 'r') as file:
+    with open('/home/mboiko/ServerMinecraft/whitelist.json', 'r') as file:
         whitelist = json.load(file)
 
     for entry in whitelist:
