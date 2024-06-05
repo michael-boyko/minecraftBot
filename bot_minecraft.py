@@ -24,7 +24,7 @@ def main() -> None:
     # Регистрация обработчиков команд и сообщений
     register_handlers(application)
 
-    log_file_path = 'logs/raw_minecraft.log'
+    log_file_path = '/home/mboiko/BotMinecraft/logs/raw_minecraft.log'
     log_thread = threading.Thread(target=monitor_log_file, args=(log_file_path,))
     log_thread.start()
 
