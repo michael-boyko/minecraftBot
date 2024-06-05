@@ -33,23 +33,37 @@ def main() -> None:
     # Запустите бота
     application.run_polling()
 
-async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def error_handler(update: Update, context) -> None:
     """Log the error and continue."""
     try:
         raise context.error
     except NetworkError as e:
         logger.error(f"NetworkError: {e}")
-        await context.bot.send_message(chat_id=update.effective_chat.id, text="Возникли проблемы с сетью, попробуйте позже.")
+        if update and update.effective_chat:
+            await context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                text="Возникли проблемы с сетью, попробуйте позже."
+                )
     except RetryAfter as e:
         logger.error(f"RetryAfter: {e}")
-        await context.bot.send_message(chat_id=update.effective_chat.id, text="Возникли проблемы с API Telegram, попробуйте позже.")
+        if update and update.effective_chat:
+            await context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                text="Возникли проблемы с API Telegram, попробуйте позже."
+                )
     except TimedOut as e:
         logger.error(f"TimedOut: {e}")
-        await context.bot.send_message(chat_id=update.effective_chat.id, text="Превышено время ожидания, попробуйте позже.")
+        if update and update.effective_chat:
+            await context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                text="Превышено время ожидания, попробуйте позже."
+                )
     except Exception as e:
         logger.error(f"Exception: {e}", exc_info=context.error)
-        await context.bot.send_message(chat_id=update.effective_chat.id, text="Произошла ошибка, попробуйте позже.")
-
+        if update and update.effective_chat:
+            await context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                text="Произошла ошибка, попробуйте позже.")
 
 if __name__ == '__main__':
     main()
