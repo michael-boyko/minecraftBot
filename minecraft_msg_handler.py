@@ -11,10 +11,13 @@ logger = logging.getLogger(__name__)
 MAIN_COMMAND = 'screen -S MinecraftServer -X stuff'
 
 def send_command_say(nickname, msg):
-    print(f'<{nickname}> {msg}')
+    full_command = f'{MAIN_COMMAND} "/nsay <{nickname}(T)> {msg}/n"'
+    os.system(full_command)
     return
 
 def send_command_list():
+    full_command = f'{MAIN_COMMAND} "\nlist\n"'
+    os.system(full_command)
     return
 
 def send_command_whitelist_add(nickname):
