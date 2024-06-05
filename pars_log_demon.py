@@ -15,7 +15,9 @@ def parse_log_line(line):
     return timestamp, message
 
 def get_all_user_from_whitelist():
-    with open('/home/mboiko/ServerMinecraft/whitelist.json', 'r') as file:
+    whitelist_path = '/home/mboiko/ServerMinecraft/whitelist.json'
+
+    with open(whitelist_path, 'r') as file:
         whitelist = json.load(file)
     return [entry['name'] for entry in whitelist]
     
@@ -36,7 +38,7 @@ class LogHandler(FileSystemEventHandler):
         self.player_log_file = open("/home/mboiko/BotMinecraft/logs/player_logs.txt", "a")
         self.system_log_file = open("/home/mboiko/BotMinecraft/logs/system_logs.txt", "a")
         self.command_log_file = open("/home/mboiko/BotMinecraft/logs/command_logs.txt", "a")
-        self.join_leave_log_file = open("/logs/join_leave_logs.txt", "a")
+        self.join_leave_log_file = open("/home/mboiko/BotMinecraft/logs/join_leave_logs.txt", "a")
 
     def process_logs(self, lines):
         for line in lines:
