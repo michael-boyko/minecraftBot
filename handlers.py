@@ -6,7 +6,7 @@ from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler, MessageHandler, filters, ConversationHandler
 from database import get_user_by_telegram_id, add_user
 from utils import handle_user_messages
-from minecraft_msg_handler import send_command_msg
+from minecraft_msg_handler import send_command_msg, send_command_say
 
 
 
@@ -124,6 +124,7 @@ async def message_handler(update: Update, context: CallbackContext) -> None:
 
     if user_data:
         # Пользователь авторизован, обрабатываем его сообщение
+        send_command_say(user_data[c.BD_NICKNAME], msg)
         await handle_user_messages(update, context, user_data, msg)
     else:
         await update.message.reply_text('Пожалуйста, сначала выполните'

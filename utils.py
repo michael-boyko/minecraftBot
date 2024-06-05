@@ -9,7 +9,7 @@ async def handle_user_messages(
         ):
     users = get_all_users_from_bd()
 
-    send_command_say(user_data[c.BD_NICKNAME], msg)
+    # send_command_say(user_data[c.BD_NICKNAME], msg)
 
     message = f'<{user_data[c.BD_NICKNAME]}(T)> {msg}'
 
