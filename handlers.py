@@ -124,6 +124,7 @@ async def message_handler(update: Update, context: CallbackContext) -> None:
 
     if user_data:
         # Пользователь авторизован, обрабатываем его сообщение
+        print('MDB -1')
         send_command_say(user_data[c.BD_NICKNAME], msg)
         await handle_user_messages(update, context, user_data, msg)
     else:
