@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 MAIN_COMMAND = 'screen -S MinecraftServer -X stuff'
 
 def send_command_say(nickname, msg):
-    local_command = f'/nsay <{nickname}(T)> {msg}/n'
+    local_command = f'\nsay <{nickname}(T)> {msg}\n'
     full_command = f'{MAIN_COMMAND} "{local_command}"'
     os.system(full_command)
     return
