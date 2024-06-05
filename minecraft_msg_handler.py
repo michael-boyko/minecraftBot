@@ -1,4 +1,7 @@
 import subprocess
+import os
+
+MAIN_COMMAND = 'screen -S MinecraftServer -X stuff'
 
 def send_command_say(nickname, msg):
     print(f'<{nickname}> {msg}')
@@ -11,6 +14,8 @@ def send_command_whitelist_add(nickname):
     return
 
 def send_command_msg(nickname, msg):
-    full_command = f"screen -S MinecraftServer -X stuff $'\nmsg {nickname} {msg}\n'"
-    result = subprocess.run(full_command, shell=True, check=True, text=True, capture_output=True)
+    local_command = f'\nmsg {nickname} {msg}\n'
+    full_command = f'{MAIN_COMMAND} "{local_command}"'
+    os.system(full_command)
+    #result = subprocess.run(full_command, shell=True, check=True, text=True, capture_output=True)
     return
