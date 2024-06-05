@@ -1,6 +1,7 @@
 import json
 import os
 import random
+import logging
 import constants as c
 from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler, MessageHandler, filters, ConversationHandler
@@ -8,7 +9,11 @@ from database import get_user_by_telegram_id, add_user
 from utils import handle_user_messages
 from minecraft_msg_handler import send_command_msg, send_command_say
 
-
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.WARNING
+)
+logger = logging.getLogger(__name__)
 
 # Определение состояний для ConversationHandler
 NICKNAME, AUTH_CODE = range(2)
@@ -118,7 +123,7 @@ async def message_handler(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
     msg = update.message.text
     telegram_id = user.id
-    print('MDB -2')
+    logger.error('MDB -2')
     # Проверка, авторизован ли пользователь
     user_data = get_user_by_telegram_id(telegram_id)
     send_command_say(user_data[c.BD_NICKNAME], msg)
