@@ -48,14 +48,14 @@ def main() -> None:
             try:
                 # Получение сообщения из очереди с таймаутом
                 message = message_queue.get(timeout=1)
-                print("MDB: Мы тут!")
+                logger.error("MDB: Мы тут!")
                 broadcast_message(message)
             except queue.Empty:
                 # Если очередь пуста, продолжаем ожидание
                 continue
     except KeyboardInterrupt:
         # Обрабатываем прерывание программы (например, Ctrl+C)
-        print("Остановка...")
+        logger.error("Остановка...")
         stop_event.set()
         log_thread.join()
 
