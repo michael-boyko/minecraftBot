@@ -13,6 +13,8 @@ def main() -> None:
     # Инициализация базы данных
     init_db()
 
+    logger.error('MDB: start app ============================')
+
     # Создайте экземпляр Application и передайте ему ваш токен
     application = Application.builder().token("6553836190:AAHgRWBjdGYQ01yLJJnKUAcDwSLSB_qMIHw").build()
 
