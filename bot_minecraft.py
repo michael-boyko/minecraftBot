@@ -48,7 +48,7 @@ def main() -> None:
             try:
                 # Получение сообщения из очереди с таймаутом
                 message = message_queue.get(timeout=1)
-                print(message)
+                broadcast_message(message)
             except queue.Empty:
                 # Если очередь пуста, продолжаем ожидание
                 continue
