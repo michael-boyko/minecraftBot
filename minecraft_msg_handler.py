@@ -21,7 +21,9 @@ def send_command_list():
     os.system(full_command)
     time.sleep(1)
 
-    command_result = parse_last_online_line('/home/mboiko/BotMinecraft/logs/command_logs.txt')
+    command_result = parse_last_online_line(
+        '/home/mboiko/BotMinecraft/logs/command_logs.txt'
+        )
     
     return command_result
 
@@ -34,7 +36,6 @@ def send_command_msg(nickname, msg):
 
     logger.error(full_command)
     os.system(full_command)
-    #result = subprocess.run(full_command, shell=True, check=True, text=True, capture_output=True)
     return
 
 def parse_last_online_line(file_path):

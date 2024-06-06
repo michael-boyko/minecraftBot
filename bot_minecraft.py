@@ -1,12 +1,14 @@
 import logging
 import threading
+import queue
+import asyncio
 from telegram.ext import Application, ContextTypes
 from telegram.error import NetworkError, RetryAfter, TimedOut
 from handlers import register_handlers
 from database import init_db
 from telegram import Update
 from pars_log_demon import monitor_log_file
-from utils import send_online_message
+from utils import broadcast_message
 
 # Установите уровень логирования
 logging.basicConfig(
@@ -26,14 +28,28 @@ def main() -> None:
     register_handlers(application)
 
     stop_event = threading.Event()
+    message_queue = queue.Queue()
     log_file_path = '/home/mboiko/BotMinecraft/logs/raw_minecraft.log'
     log_thread = threading.Thread(
         target=monitor_log_file,
-        args=(log_file_path, stop_event)
+        args=(log_file_path, stop_event, message_queue)
         )
     log_thread.start()
 
     application.add_error_handler(error_handler)
+
+    async def process_messages():
+        while not stop_event.is_set():
+            try:
+                message = message_queue.get_nowait()
+                await broadcast_message(application.bot, message)
+            except queue.Empty:
+                await asyncio.sleep(1)
+
+    application.job_queue.run_repeating(
+        lambda context: asyncio.run(process_messages()),
+        interval=1, first=1
+        )
 
     # Запустите бота
     application.run_polling()

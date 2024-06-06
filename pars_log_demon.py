@@ -1,6 +1,8 @@
 import re
 import time
 import json
+import queue
+import asyncio
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
@@ -30,11 +32,31 @@ def is_user_message(message) -> bool:
             return True
     return False
 
+def create_game_message(line):
+    # Регулярное выражение для извлечения имени игрока и действия
+    join_pattern = r'\d{2}:\d{2}:\d{2}\] (.+) joined the game'
+    leave_pattern = r'\d{2}:\d{2}:\d{2}\] (.+) left the game'
+    
+    join_match = re.match(join_pattern, line)
+    leave_match = re.match(leave_pattern, line)
+    
+    if join_match:
+        player_name = join_match.group(1)
+        result = f"{player_name} Присоединился к игре"
+        return result
+    elif leave_match:
+        player_name = leave_match.group(1)
+        result = f"{player_name} Покинул игру"
+        return result
+    else:
+        return "Ошибка при парсинге строки."
+
 # Обработчик событий для отслеживания изменений в файле
 class LogHandler(FileSystemEventHandler):
-    def __init__(self, log_file):
+    def __init__(self, log_file, message_queue):
         self.log_file = log_file
         self.position = 0
+        self.message_queue = message_queue
         self.player_log_file = open("/home/mboiko/BotMinecraft/logs/player_logs.txt", "a")
         self.system_log_file = open("/home/mboiko/BotMinecraft/logs/system_logs.txt", "a")
         self.command_log_file = open("/home/mboiko/BotMinecraft/logs/command_logs.txt", "a")
@@ -47,6 +69,8 @@ class LogHandler(FileSystemEventHandler):
                 self.player_log_file.write(f"{timestamp} {message}\n")
                 self.player_log_file.flush()
             elif "joined the game" in message or "left the game" in message:
+                msg = create_game_message(f"{timestamp} {message}\n")
+                self.message_queue.put(msg)
                 self.join_leave_log_file.write(f"{timestamp} {message}\n")
                 self.join_leave_log_file.flush()
             elif "There are" in message and "players online:" in message:
@@ -71,8 +95,8 @@ class LogHandler(FileSystemEventHandler):
         self.join_leave_log_file.close()
 
 # Основная функция для запуска наблюдателя
-def monitor_log_file(log_file_path, stop_event):
-    event_handler = LogHandler(log_file_path)
+def monitor_log_file(log_file_path, stop_event, message_queue):
+    event_handler = LogHandler(log_file_path, message_queue)
     observer = Observer()
     observer.schedule(event_handler, path=log_file_path, recursive=False)
     observer.start()
