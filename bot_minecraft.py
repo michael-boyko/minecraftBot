@@ -33,21 +33,15 @@ def main() -> None:
     application.add_error_handler(error_handler)
 
     async def process_messages():
-        while not stop_event.is_set():
-            try:
-                message = message_queue.get_nowait()
-                await broadcast_message(application, message)
-            except queue.Empty:
-                await asyncio.sleep(1)
-
-    async def periodic_task():
-        while not stop_event.is_set():
-            await process_messages()
-            await asyncio.sleep(1)
+        try:
+            message = message_queue.get_nowait()
+            await broadcast_message(application, message)
+        except queue.Empty:
+            pass
 
     application.job_queue.run_once(
-        lambda context: asyncio.create_task(periodic_task()),
-        when=0
+        lambda context: asyncio.create_task(process_messages()),
+        interval=1, first=1
     )
 
     # Запустите бота

@@ -45,11 +45,14 @@ async def send_online_message(application: Application):
 async def broadcast_message(context: CallbackContext, message: str):
     users = get_all_users_from_bd()
     logger.error('MDB: broadcast START')
-    for user_id in users:
+    for user_item in users:
         try:
-            await context.bot.send_message(chat_id=user_id, text=message)
+            await context.bot.send_message(
+                chat_id = user_item[c.BD_TELEGRAM_ID],
+                text=message
+                )
         except Exception as e:
-            print(f"Failed to send message to {user_id}: {e}")
+            print(f"Failed to send message to {user_item[c.BD_TELEGRAM_ID]}: {e}")
     return
 
 # async def broadcast(msg) -> None:
