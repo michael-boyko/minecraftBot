@@ -49,7 +49,7 @@ def main() -> None:
                 # Получение сообщения из очереди с таймаутом
                 message = message_queue.get(timeout=1)
                 logger.error("MDB: Мы тут!")
-                broadcast_message(message)
+                broadcast_message(application, message)
             except queue.Empty:
                 # Если очередь пуста, продолжаем ожидание
                 continue
