@@ -13,8 +13,6 @@ def main() -> None:
     # Инициализация базы данных
     init_db()
 
-    logger.error('MDB: start app ============================')
-
     # Создайте экземпляр Application и передайте ему ваш токен
     application = Application.builder().token("6553836190:AAHgRWBjdGYQ01yLJJnKUAcDwSLSB_qMIHw").build()
 
@@ -29,6 +27,7 @@ def main() -> None:
         args=(log_file_path, stop_event, message_queue)
     )
     log_thread.start()
+    logger.error('MDB: start app ============================')
 
     application.add_error_handler(error_handler)
 
@@ -42,6 +41,7 @@ def main() -> None:
                 message = message_queue.get(timeout=1)
                 logger.error("MDB: Мы тут!")
                 broadcast_message(application, message)
+                logger.error("MDB: А теперь тут!")
             except queue.Empty:
                 # Если очередь пуста, продолжаем ожидание
                 continue
