@@ -1,5 +1,6 @@
 import threading
 import queue
+import asyncio
 from telegram.ext import Application
 from telegram.error import NetworkError, RetryAfter, TimedOut
 from bot_logger import logger
@@ -31,25 +32,30 @@ def main() -> None:
 
     application.add_error_handler(error_handler)
 
+    async def process_messages():
+        while not stop_event.is_set():
+            try:
+                message = message_queue.get_nowait()
+                await broadcast_message(application, message)
+            except queue.Empty:
+                await asyncio.sleep(1)
+
+    async def periodic_task():
+        while not stop_event.is_set():
+            await process_messages()
+            await asyncio.sleep(1)
+
+    application.job_queue.run_once(
+        lambda context: asyncio.create_task(periodic_task()),
+        when=0
+    )
+
     # Запустите бота
     application.run_polling()
 
-    try:
-        while True:
-            try:
-                # Получение сообщения из очереди с таймаутом
-                message = message_queue.get(timeout=1)
-                logger.error("MDB: Мы тут!")
-                broadcast_message(application, message)
-                logger.error("MDB: А теперь тут!")
-            except queue.Empty:
-                # Если очередь пуста, продолжаем ожидание
-                continue
-    except KeyboardInterrupt:
-        # Обрабатываем прерывание программы (например, Ctrl+C)
-        logger.error("Остановка...")
-        stop_event.set()
-        log_thread.join()
+    stop_event.set()
+    log_thread.join()
+
 
 async def error_handler(update: Update, context) -> None:
     """Log the error and continue."""
