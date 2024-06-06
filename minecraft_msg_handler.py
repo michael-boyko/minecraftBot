@@ -46,7 +46,7 @@ def parse_last_online_line(file_path):
 
     # Парсинг строки для извлечения количества игроков и их имен
     import re
-    pattern = r'\[.*\] There are (\d+) of a max of \d+ players online: (.*)'
+    pattern = r'\[.*\] There are (\d+) of a max of \d+ players online: ?(.*)'
     match = re.match(pattern, last_line)
 
     if match:
