@@ -7,7 +7,7 @@ from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler, MessageHandler, filters, ConversationHandler
 from database import get_user_by_telegram_id, add_user
 from utils import handle_user_messages
-from minecraft_msg_handler import send_command_msg, send_command_say
+from minecraft_msg_handler import send_command_msg, send_command_list
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -112,9 +112,8 @@ async def status(update: Update, context: CallbackContext) -> None:
     if user_data:
         id, telegram_id, nickname, username, role = user_data
         if role in ['user', 'admin', 'god']:
-            await update.message.reply_text('Сервер работает!\n\n'
-                                            'Сейчас на сервере:\n'
-                                            '1) xype7')
+            command_result = send_command_list()
+            await update.message.reply_text(command_result)
         else:
             await update.message.reply_text('У вас нет прав для'
                                             'выполнения этой команды.')

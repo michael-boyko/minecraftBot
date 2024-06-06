@@ -1,5 +1,6 @@
 import os
 import logging
+import time
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -18,7 +19,11 @@ def send_command_say(nickname, msg):
 def send_command_list():
     full_command = f'{MAIN_COMMAND} "\nlist\n"'
     os.system(full_command)
-    return
+    time.sleep(1)
+
+    command_result = parse_last_online_line('/home/mboiko/BotMinecraft/logs/command_logs.txt')
+    
+    return command_result
 
 def send_command_whitelist_add(nickname):
     return
@@ -31,3 +36,24 @@ def send_command_msg(nickname, msg):
     os.system(full_command)
     #result = subprocess.run(full_command, shell=True, check=True, text=True, capture_output=True)
     return
+
+def parse_last_online_line(file_path):
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+
+    # Возьмите последнюю строку
+    last_line = lines[-1].strip()
+
+    # Парсинг строки для извлечения количества игроков и их имен
+    import re
+    pattern = r'\[.*\] There are (\d+) of a max of \d+ players online: (.*)'
+    match = re.match(pattern, last_line)
+
+    if match:
+        count = match.group(1)
+        players = match.group(2).split(', ')
+
+        result = f"Игроки на сервере: {count}\n" + '\n'.join(players)
+        return result
+    else:
+        return "Ошибка при парсинге файла."
