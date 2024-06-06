@@ -42,8 +42,8 @@ def main() -> None:
                 await broadcast_message(application, message)
             new_message_event.clear()  # Сбрасываем событие
 
-    # Запускаем процесс сообщений
-    asyncio.create_task(process_messages())
+    # Запуск процессора сообщений
+    application.post_init(lambda _: asyncio.create_task(process_messages()))
 
     # Запустите бота
     application.run_polling()
