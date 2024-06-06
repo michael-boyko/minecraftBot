@@ -48,10 +48,22 @@ def main() -> None:
             except queue.Empty:
                 await asyncio.sleep(1)
 
-    application.job_queue.run_repeating(
-        lambda context: asyncio.create_task(process_messages()),
-        interval=1, first=1
+    async def periodic_task():
+        while not stop_event.is_set():
+            await process_messages()
+            await asyncio.sleep(1)
+
+    application.job_queue.run_once(
+        lambda context: asyncio.create_task(periodic_task()),
+        when=0
     )
+
+    # Запустите бота
+    application.run_polling()
+
+    stop_event.set()
+    log_thread.join()
+
 
     # Запустите бота
     application.run_polling()
