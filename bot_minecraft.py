@@ -24,14 +24,21 @@ def main() -> None:
     # Регистрация обработчиков команд и сообщений
     register_handlers(application)
 
+    stop_event = threading.Event()
     log_file_path = '/home/mboiko/BotMinecraft/logs/raw_minecraft.log'
-    log_thread = threading.Thread(target=monitor_log_file, args=(log_file_path,))
+    log_thread = threading.Thread(
+        target=monitor_log_file,
+        args=(log_file_path, stop_event)
+        )
     log_thread.start()
 
     application.add_error_handler(error_handler)
 
     # Запустите бота
     application.run_polling()
+
+    stop_event.set()
+    log_thread.join()
 
 async def error_handler(update: Update, context) -> None:
     """Log the error and continue."""

@@ -71,14 +71,14 @@ class LogHandler(FileSystemEventHandler):
         self.join_leave_log_file.close()
 
 # Основная функция для запуска наблюдателя
-def monitor_log_file(log_file_path):
+def monitor_log_file(log_file_path, stop_event):
     event_handler = LogHandler(log_file_path)
     observer = Observer()
     observer.schedule(event_handler, path=log_file_path, recursive=False)
     observer.start()
 
     try:
-        while True:
+        while not stop_event.is_set():
             time.sleep(1)
     except KeyboardInterrupt:
         observer.stop()
