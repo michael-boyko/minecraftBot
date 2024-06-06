@@ -40,7 +40,7 @@ def main() -> None:
             pass
 
     application.job_queue.run_once(
-        lambda context: asyncio.create_task(process_messages()))
+        lambda context: asyncio.create_task(process_messages()), when = 0)
 
     # Запустите бота
     application.run_polling()
