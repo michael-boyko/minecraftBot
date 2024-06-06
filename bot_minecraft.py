@@ -34,7 +34,6 @@ def main() -> None:
     log_thread.start()
 
     application.add_error_handler(error_handler)
-    send_online_message(application)
 
     # Запустите бота
     application.run_polling()
