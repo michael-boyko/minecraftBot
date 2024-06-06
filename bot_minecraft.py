@@ -22,10 +22,12 @@ def main() -> None:
 
     stop_event = threading.Event()
     message_queue = queue.Queue()
+    new_message_event = asyncio.Event()
+
     log_file_path = '/home/mboiko/BotMinecraft/logs/raw_minecraft.log'
     log_thread = threading.Thread(
         target=monitor_log_file,
-        args=(log_file_path, stop_event, message_queue)
+        args=(log_file_path, stop_event, message_queue, new_message_event)
     )
     log_thread.start()
     logger.error('MDB: start app ============================')
@@ -33,14 +35,15 @@ def main() -> None:
     application.add_error_handler(error_handler)
 
     async def process_messages():
-        try:
-            message = message_queue.get_nowait()
-            await broadcast_message(application, message)
-        except queue.Empty:
-            pass
+        while not stop_event.is_set():
+            await new_message_event.wait()  # Ожидаем новое сообщение
+            while not message_queue.empty():
+                message = message_queue.get()
+                await broadcast_message(application, message)
+            new_message_event.clear()  # Сбрасываем событие
 
-    application.job_queue.run_once(
-        lambda context: asyncio.create_task(process_messages()), when = 0)
+    # Запускаем процесс сообщений
+    asyncio.create_task(process_messages())
 
     # Запустите бота
     application.run_polling()

@@ -52,10 +52,11 @@ def create_game_message(line):
 
 # Обработчик событий для отслеживания изменений в файле
 class LogHandler(FileSystemEventHandler):
-    def __init__(self, log_file, message_queue):
+    def __init__(self, log_file, message_queue, new_message_event):
         self.log_file = log_file
         self.position = 0
         self.message_queue = message_queue
+        self.new_message_event = new_message_event
         self.player_log_file = open("/home/mboiko/BotMinecraft/logs/player_logs.txt", "a")
         self.system_log_file = open("/home/mboiko/BotMinecraft/logs/system_logs.txt", "a")
         self.command_log_file = open("/home/mboiko/BotMinecraft/logs/command_logs.txt", "a")
@@ -70,6 +71,7 @@ class LogHandler(FileSystemEventHandler):
             elif "joined the game" in message or "left the game" in message:
                 msg = create_game_message(f"{timestamp} {message}\n")
                 self.message_queue.put(msg)
+                self.new_message_event.set()
                 self.join_leave_log_file.write(f"{timestamp} {message}\n")
                 self.join_leave_log_file.flush()
             elif "There are" in message and "players online:" in message:
@@ -94,8 +96,8 @@ class LogHandler(FileSystemEventHandler):
         self.join_leave_log_file.close()
 
 # Основная функция для запуска наблюдателя
-def monitor_log_file(log_file_path, stop_event, message_queue):
-    event_handler = LogHandler(log_file_path, message_queue)
+def monitor_log_file(log_file_path, stop_event, message_queue, new_message_event):
+    event_handler = LogHandler(log_file_path, message_queue, new_message_event)
     observer = Observer()
     observer.schedule(event_handler, path=log_file_path, recursive=False)
     observer.start()
