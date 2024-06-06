@@ -1,6 +1,8 @@
 import logging
 import threading
 import queue
+import signal
+import sys
 import asyncio
 from telegram.ext import Application, ContextTypes
 from telegram.error import NetworkError, RetryAfter, TimedOut
@@ -33,7 +35,7 @@ def main() -> None:
     log_thread = threading.Thread(
         target=monitor_log_file,
         args=(log_file_path, stop_event, message_queue)
-        )
+    )
     log_thread.start()
 
     application.add_error_handler(error_handler)
@@ -47,15 +49,16 @@ def main() -> None:
                 await asyncio.sleep(1)
 
     application.job_queue.run_repeating(
-        lambda context: asyncio.run(process_messages()),
+        lambda context: asyncio.create_task(process_messages()),
         interval=1, first=1
-        )
+    )
 
     # Запустите бота
     application.run_polling()
 
     stop_event.set()
     log_thread.join()
+
 
 async def error_handler(update: Update, context) -> None:
     """Log the error and continue."""
