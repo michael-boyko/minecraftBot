@@ -81,6 +81,9 @@ def monitor_log_file(log_file_path, stop_event):
         while not stop_event.is_set():
             time.sleep(1)
     except KeyboardInterrupt:
+        pass
+    finally:
         observer.stop()
+        observer.join()
         event_handler.close_files()
-    observer.join()
+

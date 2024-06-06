@@ -1,5 +1,5 @@
 import constants as c
-from telegram.ext import CallbackContext
+from telegram.ext import CallbackContext, Application
 from database import get_all_users_from_bd
 from telegram import Update
 from minecraft_msg_handler import send_command_say
@@ -23,6 +23,22 @@ async def handle_user_messages(
                 print('Failed to send message to ' 
                       f'{user_item[c.BD_TELEGRAM_ID]}: {e}')
     
+    return
+
+async def send_online_message(application: Application):
+    users = get_all_users_from_bd()
+    msg = 'Бот снова на связи!'
+
+    for user_item in users:
+        try:
+            await application.bot.send_message(
+                chat_id=user_item[c.BD_TELEGRAM_ID],
+                text=msg
+            )
+        except Exception as e:
+            print('Failed to send message to '
+                  f'{user_item[c.BD_TELEGRAM_ID]}: {e}')
+
     return
 
 async def broadcast_message(context: CallbackContext, message: str):

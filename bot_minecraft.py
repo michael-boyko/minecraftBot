@@ -6,6 +6,7 @@ from handlers import register_handlers
 from database import init_db
 from telegram import Update
 from pars_log_demon import monitor_log_file
+from utils import send_online_message
 
 # Установите уровень логирования
 logging.basicConfig(
@@ -33,6 +34,7 @@ def main() -> None:
     log_thread.start()
 
     application.add_error_handler(error_handler)
+    send_online_message(application)
 
     # Запустите бота
     application.run_polling()
