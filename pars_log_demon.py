@@ -1,8 +1,7 @@
 import re
 import time
 import json
-import queue
-import asyncio
+from bot_logger import logger
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 

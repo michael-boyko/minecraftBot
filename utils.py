@@ -1,4 +1,5 @@
 import constants as c
+from bot_logger import logger
 from telegram.ext import CallbackContext, Application
 from database import get_all_users_from_bd
 from telegram import Update

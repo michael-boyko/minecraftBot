@@ -30,7 +30,6 @@ def get_all_users_from_bd():
     cursor.execute('SELECT * FROM users')
 
     all_users = cursor.fetchall()
-    print(f'from BD: {len(all_users)}')
 
     conn.close()
     return all_users if all_users else None

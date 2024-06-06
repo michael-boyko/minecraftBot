@@ -1,12 +1,6 @@
 import os
-import logging
 import time
-
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.WARNING
-)
-logger = logging.getLogger(__name__)
+from bot_logger import logger
 
 MAIN_COMMAND = 'screen -S MinecraftServer -X stuff'
 

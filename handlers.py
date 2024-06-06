@@ -1,19 +1,13 @@
 import json
 import os
 import random
-import logging
 import constants as c
+from bot_logger import logger
 from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler, MessageHandler, filters, ConversationHandler
 from database import get_user_by_telegram_id, add_user
 from utils import handle_user_messages
 from minecraft_msg_handler import send_command_msg, send_command_list
-
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.WARNING
-)
-logger = logging.getLogger(__name__)
 
 # Определение состояний для ConversationHandler
 NICKNAME, AUTH_CODE = range(2)

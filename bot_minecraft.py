@@ -1,23 +1,13 @@
-import logging
 import threading
 import queue
-import signal
-import sys
-import asyncio
-from telegram.ext import Application, ContextTypes
+from telegram.ext import Application
 from telegram.error import NetworkError, RetryAfter, TimedOut
+from bot_logger import logger
 from handlers import register_handlers
 from database import init_db
 from telegram import Update
 from pars_log_demon import monitor_log_file
 from utils import broadcast_message
-
-# Установите уровень логирования
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.WARNING
-)
-logger = logging.getLogger(__name__)
 
 def main() -> None:
     # Инициализация базы данных
