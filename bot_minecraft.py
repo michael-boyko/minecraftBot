@@ -51,7 +51,12 @@ def main() -> None:
     queue_thread.start()
 
     # Запустите бота
-    application.run_polling()
+    try:
+        application.run_polling()
+    except KeyboardInterrupt:
+        logger.error("Остановка бота...")
+        message_queue.put('🔴 Сервер ушел спатоньки. Увидемся завтра!')
+        application.stop()
 
     stop_event.set()
     log_thread.join()
