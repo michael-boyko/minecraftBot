@@ -164,4 +164,4 @@ def register_handlers(application, message_queue):
     application.add_handler(CommandHandler("shutdown", shutdown))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
 
-    message_queue.put('Сервер запущен! Можно начинать играть!')
+    message_queue.put('🟢 Сервер запущен! Можно начинать играть!')
