@@ -41,7 +41,7 @@ def main() -> None:
     log_file_path = '/home/mboiko/BotMinecraft/logs/raw_minecraft.log'
     log_thread = threading.Thread(
         target=monitor_log_file,
-        args=(log_file_path, stop_event)
+        args=(log_file_path, stop_event, message_queue)
     )
     log_thread.start()
     logger.error('MDB: start app ============================')
