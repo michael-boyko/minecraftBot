@@ -1,6 +1,6 @@
 import threading
-import queue
-import asyncio
+# import queue
+# import asyncio
 from telegram.ext import Application
 from bot_logger import logger
 from handlers import register_handlers
@@ -20,13 +20,13 @@ def main() -> None:
     register_handlers(application)
 
     stop_event = threading.Event()
-    message_queue = queue.Queue()
-    new_message_event = asyncio.Event()
+    # message_queue = queue.Queue()
+    # new_message_event = asyncio.Event()
 
     log_file_path = '/home/mboiko/BotMinecraft/logs/raw_minecraft.log'
     log_thread = threading.Thread(
         target=monitor_log_file,
-        args=(log_file_path, stop_event, message_queue, new_message_event)
+        args=(log_file_path, stop_event)
     )
     log_thread.start()
     logger.error('MDB: start app ============================')
