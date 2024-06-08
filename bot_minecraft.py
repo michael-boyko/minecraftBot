@@ -12,17 +12,17 @@ from bot_error import error_handler
 message_queue = queue.Queue()
 
 # Функция для запуска обработки очереди в отдельном потоке
-def start_queue_processor(loop):
+def start_queue_processor(loop, application):
     asyncio.set_event_loop(loop)
-    loop.run_until_complete(process_queue())
+    loop.run_until_complete(process_queue(application))
 
-async def process_queue():
+async def process_queue(application):
     while True:
         if not message_queue.empty():
-            update = message_queue.get()
-            await broadcast_message(update)
+            msg = message_queue.get()
+            await broadcast_message(application, msg)
             # Здесь можно обработать сообщение из очереди
-            logger.error(f"Обработка сообщения: {update}")
+            logger.error(f"Обработка сообщения: {msg}")
         await asyncio.sleep(2)
 
 def main() -> None:
@@ -50,7 +50,7 @@ def main() -> None:
 
     # Создаем и запускаем поток для обработки очереди
     loop = asyncio.new_event_loop()
-    queue_thread = threading.Thread(target=start_queue_processor, args=(loop,))
+    queue_thread = threading.Thread(target=start_queue_processor, args=(loop, application))
     queue_thread.start()
 
     # Запустите бота
