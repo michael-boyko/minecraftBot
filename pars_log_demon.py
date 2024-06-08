@@ -39,9 +39,6 @@ def create_game_message(line):
     
     join_match = re.match(join_pattern, line)
     leave_match = re.match(leave_pattern, line)
-
-    # logger.error(f'join_match = {join_match}')
-    # logger.error(f'leave_match = {leave_match}')
     
     if join_match:
         player_name = join_match.group(1)
@@ -72,9 +69,7 @@ class LogHandler(FileSystemEventHandler):
                 self.player_log_file.write(f"{timestamp} {message}\n")
                 self.player_log_file.flush()
             elif "joined the game" in message or "left the game" in message:
-                # logger.error(message)
                 join_msg = create_game_message(message)
-                send_enter()
                 self.message_queue.put(join_msg)
                 self.join_leave_log_file.write(f"{timestamp} {message}\n")
                 self.join_leave_log_file.flush()
