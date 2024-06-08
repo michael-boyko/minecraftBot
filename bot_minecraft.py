@@ -27,6 +27,7 @@ async def process_queue(application):
 def main() -> None:
     # Инициализация базы данных
     init_db()
+    logger.error('MDB: start bot +++++++++++')
 
     # Создайте экземпляр Application и передайте ему ваш токен
     application = Application.builder().token("6553836190:AAHgRWBjdGYQ01yLJJnKUAcDwSLSB_qMIHw").build()
@@ -51,6 +52,7 @@ def main() -> None:
     queue_thread.start()
 
     # Запустите бота
+    logger.error('MDB: start APLICATION +++++++++++')
     application.run_polling()
 
     stop_event.set()
