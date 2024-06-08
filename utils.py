@@ -48,6 +48,7 @@ async def broadcast_message(context: CallbackContext, message: str):
     logger.error('MDB: we are here ==============')
 
     if users is not None:
+        logger.error('MDB: this message shouldn\'t be here' )
         for user_item in users:
             try:
                 await context.bot.send_message(
