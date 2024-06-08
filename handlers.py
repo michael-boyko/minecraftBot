@@ -130,7 +130,7 @@ async def message_handler(update: Update, context: CallbackContext) -> None:
                                         'авторизацию, отправте /start '
                                         'и следуйте инструкциям')
 
-async def shutdown(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def shutdown(update: Update) -> None:
     user = update.effective_user
     telegram_id = user.id
     user_data = get_user_by_telegram_id(telegram_id)
