@@ -33,17 +33,6 @@ def main() -> None:
 
     application.add_error_handler(error_handler)
 
-    async def process_messages():
-        while not stop_event.is_set():
-            await new_message_event.wait()  # Ожидаем новое сообщение
-            while not message_queue.empty():
-                message = message_queue.get()
-                await broadcast_message(application, message)
-            new_message_event.clear()  # Сбрасываем событие
-
-    # Запускаем процесс сообщений
-    asyncio.create_task(process_messages())
-
     # Запустите бота
     application.run_polling()
 
