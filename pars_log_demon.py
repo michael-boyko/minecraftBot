@@ -39,6 +39,9 @@ def create_game_message(line):
     
     join_match = re.match(join_pattern, line)
     leave_match = re.match(leave_pattern, line)
+
+    logger.error(f'join_match = {join_match}')
+    logger.error(f'leave_match = {leave_match}')
     
     if join_match:
         player_name = join_match.group(1)
