@@ -51,6 +51,19 @@ def create_game_message(line):
     else:
         return "Ошибка при парсинге строки."
 
+def format_message(log_line):
+    # Регулярное выражение для извлечения имени пользователя и сообщения
+    pattern = r'\[\d{2}:\d{2}:\d{2}\] \[Not Secure\] <(.*?)> (.*)'
+    match = re.match(pattern, log_line)
+    
+    if match:
+        name = match.group(1)
+        msg = match.group(2)
+        formatted_message = f"🟢 <{name}> {msg}"
+        return formatted_message
+    else:
+        return "Ошибка при парсинге строки."
+
 # Обработчик событий для отслеживания изменений в файле
 class LogHandler(FileSystemEventHandler):
     def __init__(self, log_file, message_queue):
@@ -67,6 +80,8 @@ class LogHandler(FileSystemEventHandler):
         for line in lines:
             timestamp, message = parse_log_line(line)
             if is_user_message(message):
+                playr_msg = format_message(f"{timestamp} {message}\n")
+                self.message_queue.put(playr_msg)
                 self.player_log_file.write(f"{timestamp} {message}\n")
                 self.player_log_file.flush()
             elif "joined the game" in message or "left the game" in message:
