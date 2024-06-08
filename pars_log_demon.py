@@ -31,24 +31,24 @@ def is_user_message(message) -> bool:
             return True
     return False
 
-# def create_game_message(line):
-#     # Регулярное выражение для извлечения имени игрока и действия
-#     join_pattern = r'\d{2}:\d{2}:\d{2}\] (.+) joined the game'
-#     leave_pattern = r'\d{2}:\d{2}:\d{2}\] (.+) left the game'
+def create_game_message(line):
+    # Регулярное выражение для извлечения имени игрока и действия
+    join_pattern = r'\d{2}:\d{2}:\d{2}\] (.+) joined the game'
+    leave_pattern = r'\d{2}:\d{2}:\d{2}\] (.+) left the game'
     
-#     join_match = re.match(join_pattern, line)
-#     leave_match = re.match(leave_pattern, line)
+    join_match = re.match(join_pattern, line)
+    leave_match = re.match(leave_pattern, line)
     
-#     if join_match:
-#         player_name = join_match.group(1)
-#         result = f"{player_name} Присоединился к игре"
-#         return result
-#     elif leave_match:
-#         player_name = leave_match.group(1)
-#         result = f"{player_name} Покинул игру"
-#         return result
-#     else:
-#         return "Ошибка при парсинге строки."
+    if join_match:
+        player_name = join_match.group(1)
+        result = f"{player_name} Присоединился к игре"
+        return result
+    elif leave_match:
+        player_name = leave_match.group(1)
+        result = f"{player_name} Покинул игру"
+        return result
+    else:
+        return "Ошибка при парсинге строки."
 
 # Обработчик событий для отслеживания изменений в файле
 class LogHandler(FileSystemEventHandler):
@@ -67,6 +67,7 @@ class LogHandler(FileSystemEventHandler):
                 self.player_log_file.write(f"{timestamp} {message}\n")
                 self.player_log_file.flush()
             elif "joined the game" in message or "left the game" in message:
+                join_msg = create_game_message(f"{message}\n")
                 self.join_leave_log_file.write(f"{timestamp} {message}\n")
                 self.join_leave_log_file.flush()
             elif "There are" in message and "players online:" in message:
