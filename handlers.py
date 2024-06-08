@@ -38,7 +38,8 @@ async def start(update: Update, context: CallbackContext) -> int:
         await update.message.reply_text(
             f'Привет, {user.first_name}! Укажи свое имя '
             'в Minecraft\n\n'
-            '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tВНИМАНИЕ!\n'
+            '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t'
+            'ВНИМАНИЕ!\n'
             'Для авторизации зайди на сервер Minecraft\n'
             'ТУДА БУДЕТ ОТПРАВЛЕН СЕКРЕТНЫЙ КОД'
         )
