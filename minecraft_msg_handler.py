@@ -10,7 +10,7 @@ def send_enter():
     return
 
 def send_command_say(nickname, msg):
-    local_command = f'\nsay <{nickname}(T)> {msg}\n'
+    local_command = f'\nsay <(T) {nickname}> {msg}\n'
     full_command = f'{MAIN_COMMAND} "{local_command}"'
     os.system(full_command)
     return
