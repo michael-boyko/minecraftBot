@@ -4,6 +4,7 @@ import json
 from bot_logger import logger
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+from minecraft_msg_handler import send_enter
 
 # Функция для парсинга логов
 def parse_log_line(line):
@@ -69,6 +70,7 @@ class LogHandler(FileSystemEventHandler):
                 self.player_log_file.flush()
             elif "joined the game" in message or "left the game" in message:
                 join_msg = create_game_message(f"{message}\n")
+                send_enter()
                 self.message_queue.put(join_msg)
                 self.join_leave_log_file.write(f"{timestamp} {message}\n")
                 self.join_leave_log_file.flush()

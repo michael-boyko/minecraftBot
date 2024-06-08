@@ -4,6 +4,11 @@ from bot_logger import logger
 
 MAIN_COMMAND = 'screen -S MinecraftServer -X stuff'
 
+def send_enter():
+    full_command = f'{MAIN_COMMAND} "\njust pass\n"'
+    os.system(full_command)
+    return
+
 def send_command_say(nickname, msg):
     local_command = f'\nsay <{nickname}(T)> {msg}\n'
     full_command = f'{MAIN_COMMAND} "{local_command}"'
