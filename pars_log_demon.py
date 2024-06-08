@@ -69,6 +69,7 @@ class LogHandler(FileSystemEventHandler):
                 self.player_log_file.write(f"{timestamp} {message}\n")
                 self.player_log_file.flush()
             elif "joined the game" in message or "left the game" in message:
+                line = ''
                 join_msg = create_game_message(f"{message}\n")
                 send_enter()
                 self.message_queue.put(join_msg)
