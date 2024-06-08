@@ -57,6 +57,7 @@ class LogHandler(FileSystemEventHandler):
         self.log_file = log_file
         self.message_queue = message_queue
         self.position = 0
+        self.initialized = False
         self.player_log_file = open("/home/mboiko/BotMinecraft/logs/player_logs.txt", "a")
         self.system_log_file = open("/home/mboiko/BotMinecraft/logs/system_logs.txt", "a")
         self.command_log_file = open("/home/mboiko/BotMinecraft/logs/command_logs.txt", "a")
