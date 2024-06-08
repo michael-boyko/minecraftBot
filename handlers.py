@@ -1,6 +1,7 @@
 import json
 import os
 import random
+import subprocess
 import constants as c
 from bot_logger import logger
 from telegram import Update
@@ -129,6 +130,18 @@ async def message_handler(update: Update, context: CallbackContext) -> None:
                                         'авторизацию, отправте /start '
                                         'и следуйте инструкциям')
 
+async def shutdown(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    user = update.effective_user
+    telegram_id = user.id
+    user_data = get_user_by_telegram_id(telegram_id)
+
+    if user_data and user_data[c.BD_ROLE] == 'god':
+        try:
+            subprocess.run(['sudo', 'shutdown', '-h', 'now'], check=True)
+            await update.message.reply_text("Server is shutting down.")
+        except subprocess.CalledProcessError as e:
+            await update.message.reply_text(f"Error shutting down the server: {e}")
+
 def register_handlers(application):
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
@@ -140,4 +153,5 @@ def register_handlers(application):
     )
     application.add_handler(conv_handler)
     application.add_handler(CommandHandler("status", status))
+    application.add_handler(CommandHandler("shutdown", shutdown))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))

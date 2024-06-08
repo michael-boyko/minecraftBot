@@ -21,7 +21,7 @@ async def handle_user_messages(
                     chat_id=user_item[c.BD_TELEGRAM_ID], text=message
                     )
             except Exception as e:
-                print('Failed to send message to ' 
+                logger.error('Failed to send message to ' 
                       f'{user_item[c.BD_TELEGRAM_ID]}: {e}')
     
     return
@@ -37,7 +37,7 @@ async def send_online_message(application: Application):
                 text=msg
             )
         except Exception as e:
-            print('Failed to send message to '
+            logger.error('Failed to send message to '
                   f'{user_item[c.BD_TELEGRAM_ID]}: {e}')
 
     return
@@ -52,7 +52,7 @@ async def broadcast_message(context: CallbackContext, message: str):
                 text=message
                 )
         except Exception as e:
-            print(f"Failed to send message to {user_item[c.BD_TELEGRAM_ID]}: {e}")
+            logger.error(f"Failed to send message to {user_item[c.BD_TELEGRAM_ID]}: {e}")
     return
 
 # async def broadcast(msg) -> None:
