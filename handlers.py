@@ -5,7 +5,14 @@ import subprocess
 import constants as c
 from bot_logger import logger
 from telegram import Update
-from telegram.ext import CallbackContext, CommandHandler, MessageHandler, filters, ConversationHandler
+from telegram.ext import (
+    CallbackContext,
+    CommandHandler,
+    MessageHandler,
+    filters,
+    ConversationHandler,
+    ContextTypes
+)
 from database import get_user_by_telegram_id, add_user
 from utils import handle_user_messages
 from minecraft_msg_handler import send_command_msg, send_command_list
@@ -130,7 +137,7 @@ async def message_handler(update: Update, context: CallbackContext) -> None:
                                         'авторизацию, отправте /start '
                                         'и следуйте инструкциям')
 
-async def shutdown(update: Update) -> None:
+async def shutdown(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
     telegram_id = user.id
     user_data = get_user_by_telegram_id(telegram_id)
