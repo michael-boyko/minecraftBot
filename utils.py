@@ -54,7 +54,3 @@ async def broadcast_message(context: CallbackContext, message: str):
         except Exception as e:
             logger.error(f"Failed to send message to {user_item[c.BD_TELEGRAM_ID]}: {e}")
     return
-
-# async def broadcast(msg) -> None:
-#     message = " ".join(context.args)
-#     await broadcast_message(context, message)
