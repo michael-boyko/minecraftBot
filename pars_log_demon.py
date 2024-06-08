@@ -34,8 +34,8 @@ def is_user_message(message) -> bool:
 
 def create_game_message(line):
     # Регулярное выражение для извлечения имени игрока и действия
-    join_pattern = r'\d{2}:\d{2}:\d{2}\] (.+) joined the game'
-    leave_pattern = r'\d{2}:\d{2}:\d{2}\] (.+) left the game'
+    join_pattern = r'(.+) joined the game'
+    leave_pattern = r'(.+) left the game'
     
     join_match = re.match(join_pattern, line)
     leave_match = re.match(leave_pattern, line)
@@ -73,7 +73,7 @@ class LogHandler(FileSystemEventHandler):
                 self.player_log_file.flush()
             elif "joined the game" in message or "left the game" in message:
                 # logger.error(message)
-                join_msg = create_game_message(f"{timestamp} {message}\n")
+                join_msg = create_game_message(message)
                 send_enter()
                 self.message_queue.put(join_msg)
                 self.join_leave_log_file.write(f"{timestamp} {message}\n")
