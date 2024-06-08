@@ -12,7 +12,7 @@ async def handle_user_messages(
 
     send_command_say(user_data[c.BD_NICKNAME], msg)
 
-    message = f'<{user_data[c.BD_NICKNAME]}(T)> {msg}'
+    message = f'📱<{user_data[c.BD_NICKNAME]}> {msg}'
 
     for user_item in users:
         if user_data[c.BD_NICKNAME] != user_item[c.BD_NICKNAME]:

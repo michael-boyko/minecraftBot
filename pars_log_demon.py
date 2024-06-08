@@ -59,7 +59,7 @@ def format_message(log_line):
     if match:
         name = match.group(1)
         msg = match.group(2)
-        formatted_message = f"🟢 <{name}> {msg}"
+        formatted_message = f"⛏️ <{name}> {msg}"
         return formatted_message
     else:
         return "Ошибка при парсинге строки."
