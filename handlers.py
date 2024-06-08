@@ -13,6 +13,7 @@ from telegram.ext import (
     ConversationHandler,
     ContextTypes
 )
+from functools import partial
 from database import get_user_by_telegram_id, add_user
 from utils import handle_user_messages
 from minecraft_msg_handler import send_command_msg, send_command_list
@@ -137,12 +138,12 @@ async def message_handler(update: Update, context: CallbackContext) -> None:
                                         'авторизацию, отправте /start '
                                         'и следуйте инструкциям')
 
-async def shutdown(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def shutdown(update: Update, context: ContextTypes.DEFAULT_TYPE, msg_q) -> None:
     user = update.effective_user
     telegram_id = user.id
     user_data = get_user_by_telegram_id(telegram_id)
 
-    logger.error('MDB: shutdown tests +++++')
+    msg_q.put('🔴 Сервер ушел спатоньки. Увидемся завтра!')
     if user_data and user_data[c.BD_ROLE] == 'god':
         try:
             subprocess.run(['sudo', 'shutdown', '-h', 'now'], check=True)
@@ -161,7 +162,7 @@ def register_handlers(application, message_queue):
     )
     application.add_handler(conv_handler)
     application.add_handler(CommandHandler("status", status))
-    application.add_handler(CommandHandler("shutdown", shutdown))
+    application.add_handler(CommandHandler("shutdown", partial(shutdown, msg_q = message_queue))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
 
     message_queue.put('🟢 Сервер запущен! Можно начинать играть!')
