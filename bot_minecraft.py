@@ -20,9 +20,9 @@ async def process_queue():
     while True:
         if not message_queue.empty():
             update = message_queue.get()
-            await broadcast_message(update.message.text)
+            await broadcast_message(update)
             # Здесь можно обработать сообщение из очереди
-            logger.error(f"Обработка сообщения: {update.message.text}")
+            logger.error(f"Обработка сообщения: {update}")
         await asyncio.sleep(2)
 
 def main() -> None:
