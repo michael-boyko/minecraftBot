@@ -83,10 +83,15 @@ class LogHandler(FileSystemEventHandler):
     def on_modified(self, event):
         if event.src_path == self.log_file:
             with open(self.log_file, 'r') as f:
-                f.seek(self.position)
-                new_lines = f.readlines()
-                self.position = f.tell()
-                self.process_logs(new_lines)
+                if not self.initialized:
+                    f.seek(0, 2)  # Переходим в конец файла
+                    self.position = f.tell()
+                    self.initialized = True
+                else:
+                    f.seek(self.position)
+                    new_lines = f.readlines()
+                    self.position = f.tell()
+                    self.process_logs(new_lines)
 
     def close_files(self):
         self.player_log_file.close()
