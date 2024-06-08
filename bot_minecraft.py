@@ -21,8 +21,7 @@ async def process_queue(application):
         if not message_queue.empty():
             msg = message_queue.get()
             await broadcast_message(application, msg)
-            # Здесь можно обработать сообщение из очереди
-            logger.error(f"Обработка сообщения: {msg}")
+            logger.info(f"Обработка сообщения: {msg}")
         await asyncio.sleep(2)
 
 def main() -> None:
@@ -33,10 +32,9 @@ def main() -> None:
     application = Application.builder().token("6553836190:AAHgRWBjdGYQ01yLJJnKUAcDwSLSB_qMIHw").build()
 
     # Регистрация обработчиков команд и сообщений
-    register_handlers(application)
+    register_handlers(application, message_queue)
 
     stop_event = threading.Event()
-    # new_message_event = asyncio.Event()
 
     log_file_path = '/home/mboiko/BotMinecraft/logs/raw_minecraft.log'
     log_thread = threading.Thread(
@@ -44,7 +42,6 @@ def main() -> None:
         args=(log_file_path, stop_event, message_queue)
     )
     log_thread.start()
-    logger.error('MDB: start app ============================')
 
     application.add_error_handler(error_handler)
 

@@ -150,7 +150,7 @@ async def shutdown(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         except subprocess.CalledProcessError as e:
             await update.message.reply_text(f"Error shutting down the server: {e}")
 
-def register_handlers(application):
+def register_handlers(application, message_queue):
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
         states={
@@ -163,3 +163,5 @@ def register_handlers(application):
     application.add_handler(CommandHandler("status", status))
     application.add_handler(CommandHandler("shutdown", shutdown))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
+
+    message_queue.put('Сервер запущен! Можно начинать играть!')
