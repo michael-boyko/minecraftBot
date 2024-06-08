@@ -166,5 +166,5 @@ def register_handlers(application, message_queue):
     application.add_handler(CommandHandler("shutdown", partial(shutdown, msg_q = message_queue)))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
     logger.error('MDB: before send message')
-    message_queue.put('🟢 Сервер запущен! Можно начинать играть!')
+    # message_queue.put('🟢 Сервер запущен! Можно начинать играть!')
     logger.error('MDB: after send message')
