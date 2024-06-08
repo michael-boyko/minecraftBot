@@ -32,7 +32,7 @@ def get_all_users_from_bd():
     all_users = cursor.fetchall()
 
     conn.close()
-    return all_users if all_users else []
+    return all_users if all_users else None
 
 def add_user(telegram_id, nickname, username, role):
     conn = sqlite3.connect('users.db')
