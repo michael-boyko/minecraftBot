@@ -36,8 +36,8 @@ async def start(update: Update, context: CallbackContext) -> int:
         return ConversationHandler.END
     else:
         await update.message.reply_text(
-            f'Привет, {user.first_name}! Пожалуйста, укажи свое имя '
-            'на сервере Minecraft - МЖДкивка\n\n'
+            f'Привет, {user.first_name}! Укажи свое имя '
+            'в Minecraft\n\n'
             '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tВНИМАНИЕ!\n'
             'Для авторизации зайди на сервер Minecraft\n'
             'ТУДА БУДЕТ ОТПРАВЛЕН СЕКРЕТНЫЙ КОД'
@@ -166,5 +166,5 @@ def register_handlers(application, message_queue):
     application.add_handler(CommandHandler("shutdown", partial(shutdown, msg_q = message_queue)))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
     logger.error('MDB: before send message')
-    # message_queue.put('🟢 Сервер запущен! Можно начинать играть!')
+    message_queue.put('🟢 Сервер запущен! Можно начинать играть!')
     logger.error('MDB: after send message')

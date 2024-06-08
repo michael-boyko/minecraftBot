@@ -45,10 +45,7 @@ async def send_online_message(application: Application):
 async def broadcast_message(context: CallbackContext, message: str):
     users = get_all_users_from_bd()
 
-    logger.error('MDB: we are here ==============')
-
     if users is not None:
-        logger.error('MDB: this message shouldn\'t be here' )
         for user_item in users:
             try:
                 await context.bot.send_message(
