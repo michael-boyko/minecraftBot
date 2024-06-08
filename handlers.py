@@ -40,7 +40,7 @@ def validate_auth_nickname(nickname):
     whitelist_path = '/home/mboiko/ServerMinecraft/whitelist.json'
 
     if not os.path.exists(whitelist_path):
-        print(f"File not found: {whitelist_path}")
+        logger.error(f"File not found: {whitelist_path}")
         return False
 
     with open(whitelist_path, 'r') as file:
@@ -135,6 +135,7 @@ async def shutdown(update: Update) -> None:
     telegram_id = user.id
     user_data = get_user_by_telegram_id(telegram_id)
 
+    logger.error('MDB: shutdown tests +++++')
     if user_data and user_data[c.BD_ROLE] == 'god':
         try:
             subprocess.run(['sudo', 'shutdown', '-h', 'now'], check=True)
