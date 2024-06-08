@@ -44,7 +44,6 @@ async def send_online_message(application: Application):
 
 async def broadcast_message(context: CallbackContext, message: str):
     users = get_all_users_from_bd()
-    logger.error('MDB: broadcast START')
     for user_item in users:
         try:
             await context.bot.send_message(

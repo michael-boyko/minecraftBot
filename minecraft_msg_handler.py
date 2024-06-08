@@ -54,9 +54,9 @@ def parse_last_online_line(file_path):
         players = match.group(2).split(', ') if match.group(2) else []
 
         if int(count) == 0:
-            result = "Сервер работает, но никто не играет("
+            result = "Сервер работает, но никто не играет 🤯🤯🤯"
         else:
-            result = f"Игроки на сервере: {count}\n" + '\n'.join(players)
+            result = f"👨🏽‍💻 Игроки на сервере: {count}\n" + '\n'.join(players)
         return result
     else:
         return "Ошибка при парсинге файла."

@@ -36,10 +36,10 @@ async def start(update: Update, context: CallbackContext) -> int:
         return ConversationHandler.END
     else:
         await update.message.reply_text(
-            f'Привет, {user.first_name}! Пожалуйста, укажи свое имя'
-            'на лучшем в мире сервере Minecraft - Pure_Craft_Friends\n\n'
+            f'Привет, {user.first_name}! Пожалуйста, укажи свое имя '
+            'на сервере Minecraft - МЖДкивка\n\n'
             '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tВНИМАНИЕ!\n'
-            'Для авторизации зайдите на сервер Mincraft\n'
+            'Для авторизации зайди на сервер Minecraft\n'
             'ТУДА БУДЕТ ОТПРАВЛЕН СЕКРЕТНЫЙ КОД'
         )
         return NICKNAME
@@ -70,12 +70,12 @@ async def nickname(update: Update, context: CallbackContext) -> int:
         context.user_data['true_code'] = true_code
         send_command_msg(nickname, true_code)
         await update.message.reply_text(
-            'Спасибо! Теперь, пожалуйста, напишите код авторизации.\n\n'
-            'КОД ОТПРАВЛЕН ВАМ В МАЙНКРАФТЕ'
+            'Спасибо! Теперь, пожалуйста, напиши код авторизации.\n\n'
+            'КОД ОТПРАВЛЕН В MINECRAFT'
         )
     else:
         await update.message.reply_text(
-            f'Извините, но игрока с именем "{nickname}"'
+            f'Извини, но игрока с именем "{nickname}" '
             'не существует, попробуй другое имя'
         )
         return NICKNAME
@@ -92,12 +92,13 @@ async def auth_code(update: Update, context: CallbackContext) -> int:
     if validate_auth_code(true_code, auth_code):
         username = context.user_data['username']
         add_user(telegram_id, nickname, username, 'user')
-        await update.message.reply_text('Вы успешно авторизованы как user!'
-                                        'Теперь вы можете отправлять сообщения.')
+        await update.message.reply_text('Ты успешно авторизован как user! 🎉🎉🎉\n'
+                                        'Теперь можешь отправлять сообщения. ✉️✉️✉️\n'
+                                        'Эти сообщения будут отображаться в игре')
         return ConversationHandler.END
     else:
-        await update.message.reply_text('Неверный код авторизации.'
-                                        'Попробуйте снова.')
+        await update.message.reply_text('Неверный код авторизации. 🤨 '
+                                        'Попробуй снова.')
         send_command_msg(nickname, true_code)
         return AUTH_CODE
 
@@ -118,8 +119,8 @@ async def status(update: Update, context: CallbackContext) -> None:
             command_result = send_command_list()
             await update.message.reply_text(command_result)
         else:
-            await update.message.reply_text('У вас нет прав для'
-                                            'выполнения этой команды.')
+            await update.message.reply_text('У тебя нет прав для '
+                                            'выполнения этой команды. 🤬')
 
 async def message_handler(update: Update, context: CallbackContext) -> None:
     user = update.effective_user
@@ -134,16 +135,16 @@ async def message_handler(update: Update, context: CallbackContext) -> None:
         
         await handle_user_messages(update, context, user_data, msg)
     else:
-        await update.message.reply_text('Пожалуйста, сначала выполните'
-                                        'авторизацию, отправте /start '
-                                        'и следуйте инструкциям')
+        await update.message.reply_text('Пожалуйста, сначала выполни '
+                                        'авторизацию, отправь /start '
+                                        'и следуй инструкциям')
 
 async def shutdown(update: Update, context: ContextTypes.DEFAULT_TYPE, msg_q) -> None:
     user = update.effective_user
     telegram_id = user.id
     user_data = get_user_by_telegram_id(telegram_id)
 
-    msg_q.put('🔴 Сервер ушел спатоньки. Увидемся завтра!')
+    msg_q.put('🔴 Сервер ушел спатоньки. Увидимся завтра! 👋👋👋')
     if user_data and user_data[c.BD_ROLE] == 'god':
         try:
             subprocess.run(['sudo', 'shutdown', '-h', 'now'], check=True)
