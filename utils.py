@@ -50,7 +50,8 @@ async def broadcast_message(context: CallbackContext, message: str):
             try:
                 await context.bot.send_message(
                     chat_id = user_item[c.BD_TELEGRAM_ID],
-                    text=message
+                    text=message,
+                    parse_mode='HTML'
                     )
             except Exception as e:
                 logger.error(f"Failed to send message to {user_item[c.BD_TELEGRAM_ID]}: {e}")

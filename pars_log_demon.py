@@ -44,11 +44,11 @@ def create_game_message(line):
     
     if join_match:
         player_name = join_match.group(1)
-        result = f"{player_name} присоединился к игре"
+        result = f"<b>{player_name}</b> <strong>присоединился к игре</strong> 💃🕺"
         return result
     elif leave_match:
         player_name = leave_match.group(1)
-        result = f"{player_name} покинул игру"
+        result = f"*{player_name}* **покинул игру** 🤦‍♂️"
         return result
     else:
         return "Ошибка при парсинге строки."
