@@ -29,7 +29,7 @@ def main() -> None:
     init_db()
 
     # Создайте экземпляр Application и передайте ему ваш токен
-    application = Application.builder().token("6553836190:AAHgRWBjdGYQ01yLJJnKUAcDwSLSB_qMIHw").build()
+    application = Application.builder().token("7449132613:AAHhVNLuNghFeCVbAMFC2Qu1vphFuV6lEAk").build()
 
     # Регистрация обработчиков команд и сообщений
     register_handlers(application, message_queue)
