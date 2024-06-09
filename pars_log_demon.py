@@ -1,6 +1,7 @@
 import re
 import time
 import json
+import os
 from bot_logger import logger
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -17,7 +18,8 @@ def parse_log_line(line):
     return timestamp, message
 
 def get_all_user_from_whitelist():
-    whitelist_path = '/home/mboiko/ServerMinecraft/whitelist.json'
+    path_to_whitelist = os.getenv('PATH_TO_WHITELIST')
+    whitelist_path = f'{path_to_whitelist}whitelist.json'
 
     with open(whitelist_path, 'r') as file:
         whitelist = json.load(file)
@@ -66,15 +68,15 @@ def format_message(log_line):
 
 # Обработчик событий для отслеживания изменений в файле
 class LogHandler(FileSystemEventHandler):
-    def __init__(self, log_file, message_queue):
-        self.log_file = log_file
+    def __init__(self, path_to_logs, message_queue):
+        self.log_file = f'{path_to_logs}raw_minecraft.log'
         self.message_queue = message_queue
         self.position = 0
         self.initialized = False
-        self.player_log_file = open("/home/mboiko/BotMinecraft/logs/player_logs.txt", "a")
-        self.system_log_file = open("/home/mboiko/BotMinecraft/logs/system_logs.txt", "a")
-        self.command_log_file = open("/home/mboiko/BotMinecraft/logs/command_logs.txt", "a")
-        self.join_leave_log_file = open("/home/mboiko/BotMinecraft/logs/join_leave_logs.txt", "a")
+        self.player_log_file = open(f"{path_to_logs}player_logs.txt", "a")
+        self.system_log_file = open(f"{path_to_logs}system_logs.txt", "a")
+        self.command_log_file = open(f"{path_to_logs}command_logs.txt", "a")
+        self.join_leave_log_file = open(f"{path_to_logs}join_leave_logs.txt", "a")
 
     def process_logs(self, lines):
         for line in lines:
@@ -116,10 +118,10 @@ class LogHandler(FileSystemEventHandler):
         self.join_leave_log_file.close()
 
 # Основная функция для запуска наблюдателя
-def monitor_log_file(log_file_path, stop_event, message_queue):
-    event_handler = LogHandler(log_file_path, message_queue)
+def monitor_log_file(path_to_logs, stop_event, message_queue):
+    event_handler = LogHandler(path_to_logs, message_queue)
     observer = Observer()
-    observer.schedule(event_handler, path=log_file_path, recursive=False)
+    observer.schedule(event_handler, path=path_to_logs, recursive=False)
     observer.start()
 
     try:

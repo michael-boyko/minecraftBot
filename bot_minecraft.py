@@ -1,6 +1,8 @@
 import threading
 import queue
 import asyncio
+import os
+from dotenv import load_dotenv
 from telegram.ext import Application
 from bot_logger import logger
 from handlers import register_handlers
@@ -28,18 +30,22 @@ def main() -> None:
     # Инициализация базы данных
     init_db()
 
+    load_dotenv()
+
+    token = os.getenv('TOKEN')
+
     # Создайте экземпляр Application и передайте ему ваш токен
-    application = Application.builder().token("7449132613:AAHhVNLuNghFeCVbAMFC2Qu1vphFuV6lEAk").build()
+    application = Application.builder().token(token).build()
 
     # Регистрация обработчиков команд и сообщений
     register_handlers(application, message_queue)
 
     stop_event = threading.Event()
 
-    log_file_path = '/home/mboiko/BotMinecraft/logs/raw_minecraft.log'
+    path_to_logs = os.getenv('PATH_TO_LOGS')
     log_thread = threading.Thread(
         target=monitor_log_file,
-        args=(log_file_path, stop_event, message_queue)
+        args=(path_to_logs, stop_event, message_queue)
     )
     log_thread.start()
 
